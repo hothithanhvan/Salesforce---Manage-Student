@@ -1,0 +1,166 @@
+<template>
+    <lightning-card title="Detail Student" icon-name="standard:account">
+
+        <div class="slds-p-around_x-small">
+            <div class="blockDetail">
+                <div class="blockLeft">
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Full Name: </p>
+                        <p>{student.FullName__c}</p>
+                    </div>
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Birth Day:</p>
+                        <p>{student.BirthDay__c}</p>
+                    </div>
+
+
+                </div>
+                <div class="blockNext">
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Sex:</p>
+                        <template lwc:if={student.Sex__c}>
+                            <p>Male</p>
+                        </template>
+                        <template lwc:else>
+                            <p>Female</p>
+                        </template>
+                    </div>
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Student Code: </p>
+                        <p>{student.StudentCode__c}</p>
+                    </div>
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Class: </p>
+                        <p>{student.className}</p>
+                    </div>
+                </div>
+                <div class="blockNext">
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Total Score: </p>
+                        <p>{student.avgScore}</p>
+                        <lightning-helptext class="helptext" content="S: 9.0-10
+                        A: 8.0-8.99
+                        B: 7.0-7.99
+                        C: 6.0-6.99
+                        D: 5.0-5.99 
+                        F: <4.9"></lightning-helptext>
+                    </div>
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Rank: </p>
+                        <p>{student.Rank__c}</p>
+                    </div>
+                    <div class="fieldDetail">
+                        <p class="labelDetail">Total Credit: </p>
+                        <p>{student.TotalCredit__c}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </lightning-card>
+    <lightning-combobox name="term" label="Term" placeholder="Choose Term" value={termStudent} options={termOptions}
+        onchange={handleTermChange}>
+    </lightning-combobox>
+
+    <template lwc:if={isExistStudent}>
+        <div class="noExistStudent">STUDENT DOES NOT EXIST, PLEASE REFRESH THIS PAGE</div>
+    </template>
+    <template lwc:else>
+
+    </template>
+    <!-- Modal score table -->
+    <template lwc:if={isSingleScore}>
+        <p class="termCode">Term Code: {termCode}</p>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead class="headNameComSearch colorTr">
+                <tr class="slds-line-height_reset headerTable">
+                    <th scope="col" class="noColumn">
+                        <div class="slds-truncate " title="No">Subject</div>
+                    </th>
+                    <th scope="col" class="noColumn">
+                        <div class="slds-truncate " title="No">Credit</div>
+                    </th>
+                    <th scope="col" class="nameColumn">
+                        <div class="slds-truncate " title="First Name">Process Score</div>
+                    </th>
+                    <th scope="col" class="studentcodeColumn">
+                        <div class="slds-truncate " title="Student Code">Midterm Score</div>
+                    </th>
+                    <th scope="col" class="birthdayColumn">
+                        <div class="slds-truncate " title="Birth Day">Finalterm Score</div>
+                    </th>
+                    <th scope="col" class="sexColumn">
+                        <div class="slds-truncate " title="Sex">AVG</div>
+                    </th>
+                </tr>
+            </thead>
+
+            <template for:each={listScore} for:item="s" for:index="index">
+                <tbody key={s.Id}>
+                    <tr>
+                        <td class="noColumn">{s.Subject__r.Name}</td>
+                        <td class="noColumn">{s.Subject__r.Credit__c}</td>
+                        <td class="nameColumn">{s.ProcessScore__c}</td>
+                        <td class="studentcodeColumn">{s.MidtermScore__c}</td>
+                        <td class="birthdayColumn">{s.FinaltermScore__c}</td>
+                        <td class="sexColumn">{s.avgScore__c}</td>
+                    </tr>
+                </tbody>
+            </template>
+        </table>
+        <p class="totalScore">Total Score: {totalScore}</p>
+    </template>
+
+    <template lwc:if={isAllScore}>
+        <template for:each={listAllScore} for:item="c" for:index="index">
+            <p class="termCode" key={c.Id}>Term Code: {c.name}</p>
+            <table key={c.Id} class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead class="headNameComSearch colorTr">
+
+                    <tr class="slds-line-height_reset headerTable">
+                        <th scope="col" class="noColumn">
+                            <div class="slds-truncate " title="No">Subject</div>
+                        </th>
+                        <th scope="col" class="noColumn">
+                            <div class="slds-truncate " title="No">Credit</div>
+                        </th>
+                        <th scope="col" class="nameColumn">
+                            <div class="slds-truncate " title="First Name">Process Score</div>
+                        </th>
+                        <th scope="col" class="studentcodeColumn">
+                            <div class="slds-truncate " title="Student Code">Midterm Score</div>
+                        </th>
+                        <th scope="col" class="birthdayColumn">
+                            <div class="slds-truncate " title="Birth Day">Finalterm Score</div>
+                        </th>
+                        <th scope="col" class="sexColumn">
+                            <div class="slds-truncate " title="Sex">AVG</div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <template for:each={c.subject} for:item="subject" for:index="index">
+                    <tbody key={subject.name}>
+                        <tr>
+                            <td class="noColumn">{subject.name}</td>
+                            <td class="noColumn">{subject.credit}</td>
+                            <td class="nameColumn">{subject.process}</td>
+                            <td class="studentcodeColumn">{subject.midterm}</td>
+                            <td class="birthdayColumn">{subject.finalterm}</td>
+                            <td class="sexColumn">{subject.avgScore}</td>
+                        </tr>
+                    </tbody>
+                </template>
+            </table>
+            <p key={c.Id} class="totalScore">Total Score: {c.avgScore}</p>
+        </template>
+
+    </template>
+
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" class="spinnerIcon"></lightning-spinner>
+    </template>
+    <template if:false={isLoading}>
+        <div></div>
+    </template>
+</template>

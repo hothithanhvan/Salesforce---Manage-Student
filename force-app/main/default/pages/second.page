@@ -1,0 +1,13 @@
+<apex:page controller="baythangsau">
+    
+    <style>
+    .textRed{color:red;}
+    
+    </style>
+    <h1 class = "textRed">
+        Thanh Van
+    </h1>
+    <p>
+       My name: {! StrName }
+    </p>
+</apex:page>

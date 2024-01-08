@@ -1,0 +1,21 @@
+<template>
+    <lightning-card title="Update Student" icon-name="standard:account">
+        <div class="slds-p-around_x-small">
+            <lightning-input label="First Name" type="text" value={student.FirstName__c} required="true"
+                onchange={handleFNameChange}></lightning-input>
+            <lightning-input label="Last Name" type="text" value={student.LastName__c} required="true"
+                onchange={handleLNameChange}></lightning-input>
+            <lightning-input type="checkbox" label="Sex" data-id="checkbox" onchange={handleSexChange} required="true"
+                class="showHintSex"></lightning-input>
+            <div class="hideHintSex">Check if Sex is Male</div>
+            <lightning-input label="Birth Day" type="date" value={student.BirthDay__c} required="true" max={today}
+                onchange={handleBDayChange}></lightning-input>
+            <lightning-combobox name="status" label="Class" placeholder="Choose Class" value={student.Class__c}
+                options={classOptions} onchange={handleClassChange}>
+            </lightning-combobox>
+            </br>
+            <lightning-button label="Update" variant="brand" disabled={disableUpdate}
+                onclick={handleUpdate}></lightning-button>
+        </div>
+    </lightning-card>
+</template>

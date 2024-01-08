@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Create Student" icon-name="standard:account">
+        <div class="slds-p-around_x-small">
+            <lightning-input label="First Name" type="text" value={student.FirstName__c}
+                onchange={handleFNameChange}></lightning-input>
+            <lightning-input label="Last Name" type="text" value={student.LastName__c}
+                onchange={handleLNameChange}></lightning-input>
+            <lightning-input type="checkbox" label="Sex" data-id="checkbox"
+                onchange={handleSexChange}></lightning-input><br />
+            <lightning-input label="Birth Day" type="date" value={student.BirthDay__c}
+                onchange={handleBDayChange}></lightning-input>
+            <lightning-combobox name="status" label="Status" placeholder="Choose Status" value={student.Class__c}
+                options={TypeOptions} onchange={handleClassChange}>
+            </lightning-combobox>
+            <lightning-button label="Save" onclick={handleClick}></lightning-button>
+        </div>
+    </lightning-card>
+</template>

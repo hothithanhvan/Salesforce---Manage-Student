@@ -1,0 +1,8 @@
+<aura:component>
+    <aura:attribute name="options" type="List" default="[]"/>
+
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <lightning:combobox name="general" label="Many Options" placeholder="Select an Option" options="{! v.options }" onchange="{! c.handleChange }"/>
+
+</aura:component>

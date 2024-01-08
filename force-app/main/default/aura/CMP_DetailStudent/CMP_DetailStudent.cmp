@@ -1,0 +1,54 @@
+<aura:component controller="CMP_CreateStudentCtrl">
+  <aura:attribute name="detailStudents" type="Student__c" default="{ 
+               'FirstName__c': '',
+               'LastName__c': '',
+               'BirthDay__c': '',
+               'Sex__c': '',
+               'Class__c': ''
+               }" />
+  <aura:attribute name="options" type="List" />
+  <aura:attribute name="selectedTabs" type="string" />
+  <aura:attribute name="message" type="boolean" default="false" />
+  <aura:registerEvent name="openUpdateModalInDM" type="c:OpenUpdateModalEvent" />
+  <aura:registerEvent name="deleteEvent" type="c:refreshData" />
+
+  <lightning:card iconName="standard:contact" title="Detail Student">
+    <div class="slds-p-around_medium">
+      <lightning:layout>
+        <lightning:layoutItem size="4" padding="around-small">
+          <p>First Name: {!v.detailStudents.FirstName__c}</p>
+          <p>Last Name: {!v.detailStudents.LastName__c}</p>
+          <p>Birth Day: {!v.detailStudents.BirthDay__c}</p>
+          <p>Sex: {!IF(v.detailStudents.Sex__c, 'Nam', 'Nu')}</p>
+          <p>Student Code: {!v.detailStudents.StudentCode__c}</p>
+          <p>Class: {!v.detailStudents.Class__r.ClassName__c}</p>
+          <lightning:layoutItem size="8" padding="around-small">
+            <lightning:button label="Update" onclick="{!c.updateStudent}" variant="brand" class="slds-m-top_medium" />
+            <lightning:button label="Delete" onclick="{!c.askBeforeDelete}" variant="brand" class="slds-m-top_medium" />
+          </lightning:layoutItem>
+        </lightning:layoutItem>
+      </lightning:layout>
+    </div>
+  </lightning:card>
+
+  <!-- Modal to ask when delete on row -->
+  <aura:if isTrue="{!v.message}">
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+      class="slds-modal slds-fade-in-open">
+      <div class="modalAskDelete">
+        <div class="questionDelete">
+          BẠN CÓ MUỐN XÓA KHÔNG?
+        </div>
+        <div class="footerAskDeleteModal">
+          <lightning:button class="slds-button slds-button_neutral" onclick="{!c.closeAskDeleteModal}">Cancel
+          </lightning:button>
+          <lightning:button class="slds-button slds-button_brand" onclick="{!c.deleteStudentJs}">Delete</lightning:button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    <aura:set attribute="else">
+      <div></div>
+    </aura:set>
+  </aura:if>
+</aura:component>

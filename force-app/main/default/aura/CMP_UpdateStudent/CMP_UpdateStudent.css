@@ -1,0 +1,41 @@
+.THIS .hideHintSex
+{
+    display: none;
+}
+      
+.THIS .showHintSex:hover + .hideHintSex
+{
+    display: block;
+    color: red;
+}
+.THIS .modalNotify
+{
+    background-color: white;
+    margin: 200px auto;
+    width: 500px;
+    height: 130px;
+    border-radius: 20px;
+    border-color: rgb(162,162,208);
+}
+.THIS .textNotify
+{
+    position: relative;
+    top: 20px;
+    margin-left: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+.THIS .footerNotify
+{
+    margin-top: 50px;
+    margin-left: 400px;
+}
+.THIS .btnNotify
+{
+    background-color: rgb(162,162,208);
+}
+.THIS .btnUpdateComUpdate
+{
+    background-color: rgb(162,162,208);
+
+}

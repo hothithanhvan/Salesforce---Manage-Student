@@ -1,0 +1,206 @@
+.leftSearch {
+
+    position: relative;
+    top: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.rightSearch {
+    position: relative;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.inputSearch {
+    width: 20%;
+    margin: 0px 0px 20px 20px;
+
+}
+
+.modalContain {
+    box-shadow: rgba(70, 70, 77, 0.2) 0px 7px 29px 0px;
+    margin: 100px auto;
+    width: 50%;
+    height: 450px;
+    border-radius: 5px;
+    background-color: white;
+    overflow: auto;
+    z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+tbody tr:hover {
+    background-color: rgb(202 191 219);
+}
+
+.modalAskDelete {
+    background-color: white;
+    margin: 200px auto;
+    width: 500px;
+    height: 130px;
+    border-radius: 20px;
+    box-shadow: rgba(70, 70, 77, 0.2) 0px 7px 29px 0px;
+    overflow: auto;
+    z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.questionDelete {
+    position: relative;
+    top: 20px;
+    margin-left: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+
+.footerAskDeleteModal {
+    margin-top: 50px;
+    margin-left: 300px;
+}
+
+.searchBtn {
+    margin: auto;
+    justify-content: center;
+    display: flex;
+}
+
+.createBtn {
+    margin: 10px;
+    margin-left: 70%;
+}
+
+.headerTable th {
+    background-color: rgb(162, 162, 208);
+}
+
+.resultRow td {
+    width: 160px;
+}
+
+.noColumn {
+    width: 5%;
+}
+
+.checkboxColumn {
+    width: 5%;
+}
+
+.nameColumn {
+    width: 20%;
+}
+
+.studentcodeColumn {
+    width: 10%;
+}
+
+.birthdayColumn {
+    width: 10%;
+}
+
+.sexColumn {
+    width: 6%;
+}
+
+.classColumn {
+    width: 15%;
+}
+
+.spinnerIcon {
+    margin: auto;
+    display: flex;
+    position: absolute;
+}
+
+.contain {
+    background-color: white;
+}
+
+.noStudentNotify {
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    border-color: rgb(162, 162, 208);
+    text-align: center;
+    font-size: 20px;
+    font-weight: bolder;
+    margin: 10px auto;
+    border-style: solid;
+
+}
+
+.blockCreateBtn {
+    margin: 10px;
+}
+
+.pagination {
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+}
+
+:host {
+    --slds-c-button-brand-color-border: rgb(162, 162, 208);
+    --slds-c-button-brand-color-background: rgb(162, 162, 208);
+}
+
+.closeIcon {
+    margin-left: 90%;
+}
+
+.btnPagi {
+    margin: 10px;
+}
+
+.blurBackground {
+    background-color: rgb(148, 148, 148);
+    position: relative;
+    display: none;
+    width: 100%;
+    visibility: visible;
+    opacity: 0.3;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgb(202 191 219);
+}
+
+.modalDetailContain {
+    box-shadow: rgba(70, 70, 77, 0.2) 0px 7px 29px 0px;
+    margin: 100px auto;
+    width: 70%;
+    height: 500px;
+    border-radius: 4px;
+    background-color: white;
+    overflow: auto;
+    z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.highlightRow {
+    background-color: rgb(202 191 219);
+}

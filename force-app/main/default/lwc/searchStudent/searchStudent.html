@@ -1,0 +1,234 @@
+<template>
+    <!-- </template> -->
+    <div class="contain">
+        <!-- Form search -->
+        <lightning-card title="Search Student" icon-name="standard:account">
+            <div class="slds-p-around_x-small">
+                <div class="leftSearch">
+                    <lightning-input class="inputSearch" type="text" maxlength="50" label="Full Name"
+                        value={searchStudent.FullName__c} onchange={handleFNameChange}></lightning-input>
+                    <lightning-combobox class="inputSearch" name="Sex" label="Sex" placeholder="Choose Sex"
+                        value={sexValue} options={sexOptions} onchange={handleSexChange}>
+                    </lightning-combobox>
+                    <lightning-input class="inputSearch" label="Student Code" value={searchStudent.StudentCode__c}
+                        onchange={handleStudentCodeChange}></lightning-input>
+                    <lightning-combobox class="inputSearch" name="Term" label="Term" placeholder="Choose Term"
+                        value={termSearch} options={listAllTerm} onchange={handleTermChange}>
+                    </lightning-combobox>
+                    <lightning-combobox class="inputSearch" name="Subject" label="Subject" placeholder="Choose Subject"
+                        value={subjectSearch} options={listAllSubject} onchange={handleSubjectChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="rightSearch">
+                    <lightning-input class="inputSearch bd" label="Birthday from" data-id="birthDayFromId" type="date"
+                        value={birthdayFrom} onchange={handleBDFromChange}></lightning-input>
+                    <lightning-input class="inputSearch" label="Birthday to" data-id="birthDayToId" type="date"
+                        value={birthdayTo} onchange={handleBDToChange}></lightning-input>
+                    <lightning-combobox class="inputSearch" name="status" label="Class" placeholder="Choose Class"
+                        value={searchStudent.Class__c} options={listClass} onchange={handleClassChange}>
+                    </lightning-combobox>
+                    <lightning-input class="inputSearch" label="Score from" step="0.01" data-id="scoreFromId" type="number"
+                        value={scoreFrom} onchange={handleScoreFromChange}></lightning-input>
+                    <lightning-input class="inputSearch" label="Score to" step="0.01" data-id="scoreToId" type="number"
+                        value={scoreTo} onchange={handleScoreToChange}></lightning-input>
+                </div>
+                <div class="searchBtn">
+                    <lightning-button variant="brand" disabled={disableSearch} label="Search"
+                        onclick={search}></lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+
+        <!-- Button create and delete -->
+        <div class="blockCreateBtn">
+            <lightning-button label="Create" variant="brand" onclick={handleCreate}
+                class="createBtn"></lightning-button>
+            <lightning-button label="Delete" disabled={deleteBtnState}
+                onclick={openDeleteCheckModal}></lightning-button>
+            <lightning-button label="Clear Result" onclick={clearResult}></lightning-button>
+        </div>
+
+        <!-- Table of result -->
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+            aria-label="Example default base table of Opportunities">
+            <thead class="headNameComSearch colorTr">
+                <tr class="slds-line-height_reset headerTable">
+                    <th scope="col" class="noColumn">
+                        <div class="slds-truncate " title="No">No</div>
+                    </th>
+                    <th scope="col" class="checkboxColumn">
+                        <lightning-input type="checkbox" data-id="checkAll" onchange={checkAll}></lightning-input>
+                    </th>
+                    <th scope="col" class="nameColumn">
+                        <div onclick={sortFullName} class="slds-truncate " title="First Name">Full Name
+                            <template lwc:if={isSortFullName}>
+                                <lightning-button-icon icon-name="utility:arrowdown"></lightning-button-icon>
+                            </template>
+                            <template lwc:else>
+                                <lightning-button-icon icon-name="utility:arrowup"></lightning-button-icon>
+                            </template>
+                        </div>
+                    </th>
+                    <th scope="col" class="studentcodeColumn">
+                        <div class="slds-truncate " title="Student Code">Student Code</div>
+                    </th>
+                    <th scope="col" class="birthdayColumn">
+                        <div class="slds-truncate " title="Birth Day">Birth Day</div>
+                    </th>
+                    <th scope="col" class="sexColumn">
+                        <div class="slds-truncate " title="Sex">Sex</div>
+                    </th>
+                    <th scope="col" class="classColumn">
+                        <div class="slds-truncate " title="Class">Class</div>
+                    </th>
+                    <th scope="col" class="">
+                        <div class="slds-truncate " title="Class">AVG Score</div>
+                    </th>
+                    <th scope="col" class="">
+                        <div class="slds-truncate " title="Class">Total Credit</div>
+                    </th>
+                    <th scope="col" class="">
+                        <div class="slds-truncate " title="Class">Rank</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Action">Action</div>
+                    </th>
+                </tr>
+            </thead>
+
+            <template for:each={getListPagination} for:item="s" for:index="index">
+                <tbody key={s.Id}>
+                    <tr onclick={highlightRow} class={s.highlight}>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow} class="noColumn">{s.index}</td>
+                        <td class="checkboxColumn">
+                            <lightning-input type="checkbox" checked={s.check} data-id="checkOnRow" value={index}
+                                onchange={statusCheckbox}></lightning-input>
+                        </td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow} class="nameColumn">{s.FullName__c}</td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow} class="studentcodeColumn">
+                            {s.StudentCode__c}</td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow} class="birthdayColumn">{s.BirthDay__c}</td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow} class="sexColumn">
+                            <template lwc:if={s.Sex__c}>
+                                Male
+                            </template>
+                            <template lwc:else>
+                                Female
+                            </template>
+                        </td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow} class="classColumn">{s.className}
+                        </td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow}>{s.avgScore}</td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow}>{s.TotalCredit__c}</td>
+                        <td data-id={s.Id} ondblclick={openDetailModalonRow}>{s.Rank__c}</td>
+                        <td>
+                            <lightning-button-icon onclick={openDetailModal} icon-name="utility:description"
+                                alternative-text="Detail" title="Detail" value={s.Id}></lightning-button-icon>
+                            <lightning-button-icon onclick={openUpdateModal} icon-name="utility:edit"
+                                alternative-text="Edit" title="Edit" value={s.Id}></lightning-button-icon>
+                            <lightning-button-icon onclick={openDeleteModal} icon-name="utility:delete"
+                                alternative-text="Delete" title="Delete" value={s.Id}
+                                name={s.FullName__c}></lightning-button-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </template>
+        </table>
+        <p>Number of rows: {lengthOfListStudent}</p>
+        <!-- Pagination -->
+        <template lwc:if={isShowPagi}>
+            <div class="pagination">
+                <lightning-button variant="brand" disabled={disableFirstPage} class="btnPagi" label="First" value=1
+                    onclick={changePage}></lightning-button>
+                <lightning-button-icon disabled={disableFirstPage} class="btnPagi" onclick={changePage}
+                    icon-name="utility:chevronleft" alternative-text="Previous"
+                    value="previousPage"></lightning-button-icon>
+                <template for:each={listPage} for:item="list" for:index="index">
+                    <lightning-button class="btnPagi" key={list.number} variant={list.variant} value={list.number}
+                        label={list.number} onclick={changePage}></lightning-button>
+                </template>
+                <lightning-button-icon disabled={disableLastPage} class="btnPagi" onclick={changePage}
+                    icon-name="utility:chevronright" alternative-text="Next" value="nextPage"></lightning-button-icon>
+                <lightning-button variant="brand" class="btnPagi" label="Last" value={pageCount}
+                    disabled={disableLastPage} onclick={changePage}></lightning-button>
+            </div>
+        </template>
+
+        <!-- Show notify if have no student -->
+        <template lwc:if={isShowStudent}>
+            <div class="noStudentNotify">No student</div>
+        </template>
+
+        <!-- Modal create -->
+        <template lwc:if={isShowCreateModal}>
+            <div class="modalContain">
+                <lightning-button-icon onclick={closeModal} icon-name="utility:close" alternative-text="Close"
+                    title="Close"></lightning-button-icon>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-insert-student onreloaddata={search}></c-insert-student>
+                </div>
+            </div>
+        </template>
+
+        <!-- Modal detail -->
+        <template lwc:if={isShowDetailModal}>
+            <div class="modalDetailContain">
+                <lightning-button-icon onclick={closeModal} icon-name="utility:close" alternative-text="Close"
+                    title="Close"></lightning-button-icon>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-detail-student student={detailStudent}></c-detail-student>
+                </div>
+            </div>
+        </template>
+
+        <!-- Modal update -->
+        <template lwc:if={isShowUpdateModal}>
+            <div class="modalContain">
+                <lightning-button-icon onclick={closeModal} icon-name="utility:close" alternative-text="Close"
+                    title="Close"></lightning-button-icon>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-update-student onreloaddata={search} editid={updateId}></c-update-student>
+                </div>
+            </div>
+        </template>
+
+        <!-- Modal ask before delete -->
+        <template lwc:if={isShowDeleteModal}>
+
+            <div class="modalAskDelete">
+                <div class="questionDelete">
+                    BẠN CÓ MUỐN XÓA HỌC SINH {nameDelete} KHÔNG?
+                </div>
+                <div class="footerAskDeleteModal">
+                    <lightning:button class="slds-button slds-button_neutral" onclick={closeModal}>Cancel
+                    </lightning:button>
+                    <lightning:button class="slds-button slds-button_brand" onclick={deleteOnRow}>Delete
+                    </lightning:button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Modal ask before delete multiple -->
+        <template lwc:if={isShowDeleteCheckModal}>
+            <div class="modalAskDelete">
+                <div class="questionDelete">
+                    BẠN CÓ MUỐN XÓA KHÔNG?
+                </div>
+                <div class="footerAskDeleteModal">
+                    <lightning:button class="slds-button slds-button_neutral" onclick={closeModal}>Cancel
+                    </lightning:button>
+                    <lightning:button class="slds-button slds-button_brand" onclick={deleteMultiple}>Delete
+                    </lightning:button>
+                </div>
+            </div>
+        </template>
+        <div class="blurBackground" data-id="blurBackground" onclick={closeModal}></div>
+        <!-- Loading icon -->
+        <template if:true={isLoaded}>
+            <lightning-spinner alternative-text="Loading" class="spinnerIcon"></lightning-spinner>
+        </template>
+        <template if:false={isLoaded}>
+            <div></div>
+        </template>
+    </div>
+</template>

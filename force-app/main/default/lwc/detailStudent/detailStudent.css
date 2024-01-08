@@ -1,0 +1,81 @@
+.modalContain {
+    margin: 100px auto;
+    width: fit-content;
+    height: 400px;
+    border-radius: 20px;
+    background-color: white;
+    padding: 20px;
+    overflow: auto;
+}
+
+.closeIcon {
+    margin-left: 90%;
+}
+
+.termCode {
+    padding: 20px;
+    font-weight: bold;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.totalScore {
+    padding: 5px;
+    text-align: right;
+    font-weight: bold;
+
+}
+
+.blockNext {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+}
+
+.labelDetail {
+    width: 100px;
+}
+
+.blockDetail {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+}
+
+.blockLeft {
+    flex-direction: column;
+    position: relative;
+    display: flex;
+
+}
+
+.fieldDetail {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 200px;
+    margin: 5px;
+
+}
+
+
+.totalAllScore {
+    display: flex;
+    flex-direction: row;
+}
+
+.helptext {
+    position: relative;
+    top: -4px;
+    left: 2px;
+}
+
+.noExistStudent {
+    font-size: 22px;
+    font-weight: bold;
+    justify-content: center;
+    position: relative;
+    display: flex;
+    margin: 30px;
+}

@@ -1,0 +1,27 @@
+.THIS .modalAskDelete
+{
+    background-color: white;
+    margin: 200px auto;
+    width: 500px;
+    height: 130px;
+    border-radius: 20px;
+    border-color: rgb(162,162,208);
+}
+.THIS .questionDelete
+{
+    position: relative;
+    top: 20px;
+    margin-left: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+.THIS .footerAskDeleteModal
+{
+    margin-top: 50px;
+    margin-left: 300px;
+}
+
+.THIS button
+{
+    background-color: rgb(162,162,208);
+}

@@ -1,0 +1,17 @@
+<aura:component>
+    <!-- Imports -->
+    <aura:import library="lightningcomponentdemo:mockdataFaker" property="mockdataLibrary" />
+
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="columns" type="List" />
+
+    <!-- handlers-->
+    <aura:handler name="init" value="{! this }" action="{! c.init }" />
+
+    <!-- the container element determine the height of the datatable -->
+    <div style="height: 300px">
+        <lightning:datatable columns="{! v.columns }" data="{! v.data }" keyField="id"
+            onrowaction="{! c.handleRowAction }" />
+    </div>
+</aura:component>

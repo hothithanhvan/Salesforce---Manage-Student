@@ -1,0 +1,212 @@
+<template>
+    <div class="contain">
+
+        <!-- Form search -->
+        <lightning-card title="Search Student" icon-name="standard:account">
+            <div class="slds-p-around_x-small">
+                <div class="leftSearch">
+                    <lightning-input type="text" label="Full Name" value={searchStudent.FullName__c}
+                        onchange={handleFNameChange}></lightning-input>
+                    <lightning-input type="checkbox" label="Male" data-id="male"
+                        onchange={setSexValue}></lightning-input>
+                    <lightning-input type="checkbox" label="Female" data-id="female"
+                        onchange={setSexValue}></lightning-input>
+                    <lightning-input label="Student Code" value={searchStudent.StudentCode__c}
+                        onchange={handleStudentCodeChange}></lightning-input>
+                </div>
+                <div class="rightSearch">
+                    <lightning-input label="Birth Day" type="date" value={searchStudent.BirthDay__c}
+                        onchange={handleBDayChange}></lightning-input>
+                    <lightning-combobox name="status" label="Status" placeholder="Choose Status"
+                        value={searchStudent.Class__c} options={listClass} onchange={handleClassChange}>
+                    </lightning-combobox>
+                </div>
+                <lightning-button variant="brand" label="Search" class="searchBtn" onclick={search}></lightning-button>
+            </div>
+        </lightning-card>
+
+        <!-- Button create and delete -->
+        <div class="blockCreateBtn">
+            <lightning-button label="Create" variant="brand" onclick={handleCreate}
+                class="createBtn"></lightning-button>
+            <lightning-button label="Delete" disabled={deleteBtnState}
+                onclick={openDeleteCheckModal}></lightning-button>
+        </div>
+
+        <!-- Table of result -->
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+            aria-label="Example default base table of Opportunities">
+            <thead class="headNameComSearch colorTr">
+                <tr class="slds-line-height_reset headerTable">
+                    <th scope="col">
+                        <div class="slds-truncate" title="No">No</div>
+                    </th>
+                    <th scope="col">
+                        <lightning-input type="checkbox" data-id="checkAll" onchange={checkAll}></lightning-input>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="First Name">Full Name</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Student Code">Student Code</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Birth Day">Birth Day</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Birth Day">Sex</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Birth Day">Class</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Birth Day">Action</div>
+                    </th>
+                </tr>
+            </thead>
+
+            <template for:each={getListPagination} for:item="s" for:index="index">
+                <tbody key={s.Id}>
+                    <tr>
+                        <td>{s.index}</td>
+                        <td>
+                            <lightning-input type="checkbox" checked={s.check} data-id="checkOnRow" value={index}
+                                onchange={statusCheckbox}></lightning-input>
+                        </td>
+                        <td>{s.FullName__c}</td>
+                        <td>{s.StudentCode__c}</td>
+                        <td>{s.BirthDay__c}</td>
+                        <td>
+                            <template lwc:if={s.Sex__c}>
+                                Nam
+                            </template>
+                            <template lwc:else>
+                                Nu
+                            </template>
+                        </td>
+                        <td>{s.className}
+                        </td>
+                        <td>
+                            <lightning-button-icon onclick={openDetailModal} icon-name="utility:description"
+                                alternative-text="Detail" title="Detail" value={s.Id}></lightning-button-icon>
+                            <lightning-button-icon onclick={openUpdateModal} icon-name="utility:edit"
+                                alternative-text="Edit" title="Edit" value={s.Id}></lightning-button-icon>
+                            <lightning-button-icon onclick={openDeleteModal} icon-name="utility:delete"
+                                alternative-text="Delete" title="Delete" value={s.Id}></lightning-button-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </template>
+        </table>
+
+        <!-- Pagination -->
+        <template lwc:if={isShowPagi}>
+            <div class="pagination">
+                <lightning-button label="First" value=1 onclick={changePage}></lightning-button>
+                <lightning-button label="Previous" value="previousPage" onclick={changePage}></lightning-button>
+                <template for:each={listPage} for:item="list" for:index="index">
+                    <lightning-button key={list.number} variant={list.variant} value={list.number} label={list.number}
+                        onclick={changePage}></lightning-button>
+                </template>
+                <lightning-button label="Next" value="nextPage" onclick={changePage}></lightning-button>
+                <lightning-button label="Last" value={pageCount} onclick={changePage}></lightning-button>
+            </div>
+        </template>
+
+        <!-- Show notify if have no student -->
+        <template lwc:if={isShowStudent}>
+            <div class="noStudentNotify">Không có một học sinh nào cả</div>
+        </template>
+
+        <!-- Modal create -->
+        <template lwc:if={isShowCreateModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="modalContain" style="background-color: white;">
+                    <lightning-button-icon onclick={closeCreateModal} icon-name="utility:close" alternative-text="Close"
+                        title="Close"></lightning-button-icon>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <c-insert-student onreloaddata={search}></c-insert-student>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal detail -->
+        <template lwc:if={isShowDetailModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="modalContain" style="background-color: white;">
+                    <lightning-button-icon onclick={closeDetailModal} icon-name="utility:close" alternative-text="Close"
+                        title="Close"></lightning-button-icon>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <c-detail-student student={detailStudent}></c-detail-student>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal update -->
+        <template lwc:if={isShowUpdateModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="modalContain" style="background-color: white;">
+                    <lightning-button-icon onclick={closeUpdateModal} icon-name="utility:close" alternative-text="Close"
+                        title="Close"></lightning-button-icon>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <c-update-student onreloaddata={search} editid={updateId}></c-update-student>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal ask before delete -->
+        <template lwc:if={isShowDeleteModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="modalAskDelete">
+                    <div class="questionDelete">
+                        BẠN CÓ MUỐN XÓA KHÔNG?
+                    </div>
+                    <div class="footerAskDeleteModal">
+                        <lightning:button class="slds-button slds-button_neutral" onclick={closeDeleteModal}>Cancel
+                        </lightning:button>
+                        <lightning:button class="slds-button slds-button_brand" onclick={deleteOnRow}>Delete
+                        </lightning:button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal ask before delete multiple -->
+        <template lwc:if={isShowDeleteCheckModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="modalAskDelete">
+                    <div class="questionDelete">
+                        BẠN CÓ MUỐN XÓA KHÔNG?
+                    </div>
+                    <div class="footerAskDeleteModal">
+                        <lightning:button class="slds-button slds-button_neutral" onclick={closeDeleteCheckModal}>Cancel
+                        </lightning:button>
+                        <lightning:button class="slds-button slds-button_brand" onclick={handleDelete}>Delete
+                        </lightning:button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Loading icon -->
+        <template if:true={loaded}>
+            <lightning-spinner alternative-text="Loading" class="spinnerIcon"></lightning-spinner>
+        </template>
+        <template if:false={loaded}>
+            <div></div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,13 @@
+.hideHintSex {
+    display: none;
+}
+
+.showHintSex:hover+.hideHintSex {
+    display: block;
+    color: red;
+}
+
+:host {
+    --slds-c-button-brand-color-background: rgb(162, 162, 208);
+}
+

@@ -1,0 +1,284 @@
+<aura:component controller="CMP_SearchStudentCtrl" implements="flexipage:availableForRecordHome,force:appHostable">
+  <aura:attribute name="searchStudent" type="Student__c" default="{  'FullName__c':'',
+                  'StudentCode__c':'',
+                  'BirthDay__c': '',
+                  'Class__c': '',
+                }" />
+
+  <aura:attribute name="pageCount" type="integer" />
+  <aura:attribute name="pageSize" type="integer" default="4" />
+  <aura:attribute name="currentPage" type="integer" default="1" />
+  <aura:attribute name="listDataOfPage" type="List" />
+  <aura:attribute name="message" type="String" default="" />
+  <aura:attribute name="options" type="List" />
+  <aura:attribute name="selectedTab" type="string" />
+  <aura:attribute name="listPage" type="List" default="" />
+  <aura:attribute name="detailStudent" type="Student__c" default="{ 
+              'FirstName__c': '',
+              'LastName__c': '',
+              'BirthDay__c': '',
+              'StudentCode__c':'',
+              'Sex__c':'',
+              'Class__c': '',
+              }" />
+
+  <aura:attribute name="updateStudent" type="Student__c" default="{ 
+              'FirstName__c': '',
+              'LastName__c': '',
+              'BirthDay__c': '',
+              'StudentCode__c':'',
+              'Sex__c':'',
+              'Class__c': '',
+              }" />
+
+  <aura:handler name="init" value="{! this }" action="{!c.search}" />
+  <aura:attribute name="Student" type="Student__c" />
+  <aura:attribute name="studentCheck" type="List" />
+  <aura:attribute name="Columns" type="List" />
+  <aura:attribute name="Names" type="String" default="ThanhVan" />
+  <aura:handler name="init" value="{! this }" action="{!c.showClass}" />
+  <aura:attribute name="stateCreate" type="Boolean" default="false" />
+  <aura:attribute name="stateUpdate" type="Boolean" default="false" />
+  <aura:attribute name="stateDetail" type="Boolean" default="false" />
+  <aura:attribute name="checkAll" type="boolean" default="false" />
+  <aura:attribute name="hidePagi" type="boolean" default="true" />
+  <aura:attribute name="deleteBtnState" type="boolean" default="true" />
+  <aura:handler name="openUpdateModalInDM" event="c:OpenUpdateModalEvent" action="{!c.openUpdateModalInDetailModal}" />
+  <aura:handler name="createEvent" event="c:refreshData" action="{!c.search}" />
+  <aura:handler name="updateEvent" event="c:refreshData" action="{!c.search}" />
+  <aura:handler name="deleteEvent" event="c:refreshData" action="{!c.search}" />
+  <aura:attribute name="askDeleteModal" type="boolean" default="false" />
+  <aura:attribute name="askDeleteCheckModal" type="boolean" default="false" />
+  <aura:attribute name="deleteId" type="String" />
+  <aura:attribute name="isLoaded" type="boolean" default="false" />
+  <aura:attribute name="disableFirst" type="boolean" default="false" />
+  <aura:attribute name="disableLast" type="boolean" default="false" />
+  <aura:attribute name="sexValue" type="string" />
+  <div>
+    <div class="contain">
+      <!-- Form search -->
+      <lightning:card iconName="standard:contact" title="Search Student" />
+      <lightning:layout>
+        <div class="leftSearchComSearch">
+          <lightning:input type="Text" label="Name" value="{!v.searchStudent.FullName__c}" maxlength="50" />
+          <lightning:select name="select" label="Sex" value="{!v.sexValue}">
+            <option value="all">All</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </lightning:select>
+          <lightning:input type="Date" aura:id="inputBirthday" label="Birth Day"
+            value="{!v.searchStudent.BirthDay__c}" />
+          <lightning:layoutItem size="8" padding="around-small">
+            <lightning:button label="Search" onclick="{!c.search}" class="btnSearchComSearch slds-m-top_medium" />
+          </lightning:layoutItem>
+        </div>
+        <div class="rightSearchComSearch">
+          <lightning:input type="Text" label="Student Code" value="{!v.searchStudent.StudentCode__c}" />
+          <lightning:select name="Objects" label="Class" value="{!v.searchStudent.Class__c}">
+            <option value="None" text="None" />
+            <aura:iteration items="{!v.options}" var="objectname">
+              <option value="{!objectname.Id}" text="{!objectname.ClassName__c}" />
+            </aura:iteration>
+          </lightning:select>
+        </div>
+      </lightning:layout>
+
+      <!-- Button create and delete -->
+      <div>
+        <lightning:button label="Create" onclick="{!c.openCreateModal}" class="btnCreateComSearch slds-m-top_medium" />
+        <lightning:button disabled="{!v.deleteBtnState}" label="Delete" onclick="{!c.askBeforeDeleteCheck}"
+          class="btnDeleteComSearch slds-m-top_medium" />
+      </div>
+
+      <!-- Table result -->
+      <div>
+        <div class="tableResultComSearch">
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+            aria-label="Example default base table of Opportunities">
+            <thead class="headNameComSearch colorTr">
+              <tr class="slds-line-height_reset">
+                <th scope="col">
+                  <div class="slds-truncate" title="No">No</div>
+                </th>
+                <th scope="col">
+                  <lightning:input checked="{!v.checkAll}" aura:id="checkAll" onchange="{!c.checkAll}"
+                    type="checkbox" />
+                </th>
+                <th scope="col">
+                  <div class="slds-truncate" title="First Name">Full Name</div>
+                </th>
+                <th scope="col">
+                  <div class="slds-truncate" title="Student Code">Student Code</div>
+                </th>
+                <th scope="col">
+                  <div class="slds-truncate" title="Birth Day">Birth Day</div>
+                </th>
+                <th scope="col">
+                  <div class="slds-truncate" title="Birth Day">Sex</div>
+                </th>
+                <th scope="col">
+                  <div class="slds-truncate" title="Birth Day">Class</div>
+                </th>
+                <th scope="col">
+                  <div class="slds-truncate" title="Birth Day"></div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <aura:iteration items="{!v.listDataOfPage}" var="s" indexVar="i">
+                <tr>
+                  <td class="noColumn ">{!i+1}</td>
+                  <td class="checkboxColumn">
+                    <lightning:input checked="{!s.checked}" type="checkbox" onchange="{!c.checkStateOnRow}" />
+                  </td>
+                  <td class="nameColumn">{!s.FullName__c}</td>
+                  <td class="studentcodeColumn">{!s.StudentCode__c}</td>
+                  <td class="birthdayColumn">{!s.BirthDay__c}</td>
+                  <td class="sexColumn">{!s.Sex__c ? 'Male' : 'Female'}</td>
+                  <td class="classColumn">{!s.Class__r.ClassName__c}</td>
+                  <td>
+                    <lightning:buttonIcon value="{!s.Id}" iconName="utility:description" variant="bare"
+                      onclick="{!c.openDetailModal}" alternativeText="Detail" title="Detail" />
+                    <lightning:buttonIcon value="{!s.Id}" iconName="utility:edit" variant="bare"
+                      onclick="{!c.openUpdateModal}" alternativeText="Edit" title="Edit" />
+                    <lightning:buttonIcon value="{!s.Id}" iconName="utility:delete" variant="bare"
+                      onclick="{!c.askBeforeDelete }" alternativeText="Delete" title="Delete" />
+                  </td>
+                </tr>
+              </aura:iteration>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <aura:if isTrue="{!v.hidePagi}">
+          <lightning:button disabled="{!v.disableFirst}" class="btnPagi" value="{!1}" onclick="{!c.changePage}"
+            label="First" />
+          <lightning:buttonIcon disabled="{!v.disableFirst}" class="btnPagi" value="{!v.currentPage-1}"
+            iconName="utility:chevronleft" onclick="{!c.changePage}" alternativeText="Previous" />
+          <aura:iteration items="{!v.listPage}" var="item">
+            <span class="btnPagi">
+              <lightning:button class="{! item == v.currentPage ? 'btnOnRowComSearch' : ''}" onclick="{!c.changePage}"
+                value="{!item}">
+                {!item}</lightning:button>
+            </span>
+          </aura:iteration>
+          <lightning:buttonIcon disabled="{!v.disableLast}" class="btnPagi" value="{!v.currentPage+1}"
+            iconName="utility:chevronright" onclick="{!c.changePage}" alternativeText="Next" />
+          <lightning:button disabled="{!v.disableLast}" class="btnPagi" value="{!v.pageCount}" onclick="{!c.changePage}"
+            label="Last" />
+          <aura:set attribute="else">
+            <div></div>
+          </aura:set>
+        </aura:if>
+      </div>
+
+
+      <!-- Modal Create -->
+      <aura:if isTrue="{!v.stateCreate}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+          class="slds-modal slds-fade-in-open">
+          <div class="modalContainComSearch " style="background-color: white;">
+            <lightning:buttonIcon iconName="utility:close" variant="bare" class="btnCloseComSearch" size="large"
+              onclick="{! c.closeCreateModal }" alternativeText="Close" title="Close" />
+            <div class="slds-modal__content slds-p-around_medium createModalComSearch" id="modal-content-id-1">
+              <c:CMP_CreateStudent />
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        <aura:set attribute="else">
+          <div></div>
+        </aura:set>
+      </aura:if>
+
+      <!-- Modal Update -->
+      <aura:if isTrue="{!v.stateUpdate}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+          class="slds-modal slds-fade-in-open">
+          <div class="modalContainComSearch " style="background-color: white;">
+            <lightning:buttonIcon iconName="utility:close" variant="bare" class="btnCloseComSearch" size="large"
+              onclick="{! c.closeUpdateModal }" alternativeText="Close" title="Close" />
+            <div class="slds-modal__content slds-p-around_medium createModalComSearch" id="modal-content-id-1">
+              <c:CMP_UpdateStudent updateStudents="{!v.updateStudent}" />
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        <aura:set attribute="else">
+          <div></div>
+        </aura:set>
+      </aura:if>
+
+      <!-- Modal detail -->
+      <aura:if isTrue="{!v.stateDetail}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+          class="slds-modal slds-fade-in-open">
+          <div class="modalContainComSearch " style="background-color: white;">
+            <lightning:buttonIcon iconName="utility:close" variant="bare" class="btnCloseComSearch" size="large"
+              onclick="{! c.closeDetailModal }" alternativeText="Close" title="Close" />
+            <div class="slds-modal__content slds-p-around_medium createModalComSearch" id="modal-content-id-1">
+              <c:CMP_DetailStudent detailStudents="{!v.detailStudent}" />
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        <aura:set attribute="else">
+          <div></div>
+        </aura:set>
+      </aura:if>
+
+      <!-- Modal to ask when delete on row -->
+      <aura:if isTrue="{!v.askDeleteModal}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+          class="slds-modal slds-fade-in-open">
+          <div class="modalAskDelete">
+            <div class="questionDelete">
+              BẠN CÓ MUỐN XÓA KHÔNG?
+            </div>
+            <div class="footerAskDeleteModal">
+              <lightning:button class="slds-button slds-button_neutral" onclick="{!c.closeAskDeleteModal}">Cancel
+              </lightning:button>
+              <lightning:button class="slds-button slds-button_brand" onclick="{!c.deleteStudentOnRow}">Delete
+              </lightning:button>
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        <aura:set attribute="else">
+          <div></div>
+        </aura:set>
+      </aura:if>
+
+      <!-- Modal to ask when delete by checkbox -->
+      <aura:if isTrue="{!v.askDeleteCheckModal}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+          class="slds-modal slds-fade-in-open">
+          <div class="modalAskDelete">
+            <div class="questionDelete">
+              BẠN CÓ MUỐN XÓA CÁC HỌC SINH ĐÃ CHỌN KHÔNG?
+            </div>
+            <div class="footerAskDeleteModal">
+              <lightning:button class="slds-button slds-button_neutral" onclick="{!c.closeAskDeleteModal}">Cancel
+              </lightning:button>
+              <lightning:button class="slds-button slds-button_brand" onclick="{!c.deleteCheck}">Delete
+              </lightning:button>
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        <aura:set attribute="else">
+          <div></div>
+        </aura:set>
+      </aura:if>
+      <aura:if isTrue="{!v.isLoaded}">
+        <lightning:spinner alternativeText="Loading" size="large" />
+        <aura:set attribute="else">
+          <div></div>
+        </aura:set>
+      </aura:if>
+    </div>
+  </div>
+</aura:component>

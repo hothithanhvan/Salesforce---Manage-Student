@@ -1,0 +1,80 @@
+<apex:page id="page" docType="html-5.0" controller="StudentController">
+    <style type="text/CSS">
+        html { font-size: 20px; } 
+        input[type=text]
+        { 
+            border-radius: 0px; height: 20px; width: 400px; margin-bottom: 20px; 
+        } 
+        .divBlockInsert
+        { 
+            margin-top: 20px; 
+        } 
+        .btnInsert 
+        { 
+            margin-left: 200px; 
+        }
+        .blockResult
+        {
+            border-style: solid;
+        }
+    </style>
+    <!-- Form to enter student-->
+    <apex:form id="formInsertId">
+        <apex:commandButton value="Back" oncomplete="doRedirect();" />
+        <div class="divBlockInsert">
+            <apex:pageBlock id="blockCreateId">
+                <apex:pageBlockSection id="sectionCreateId" columns="1">
+                    <apex:inputField value="{!insertStudent.FirstName__c}" required="true" />
+                    <apex:inputField value="{!insertStudent.LastName__c}" required="true" />
+                    <apex:inputField value="{!insertStudent.BirthDay__c}" type="date" required="true"  />
+                    <apex:inputField value="{!insertStudent.Sex__c}" />
+                    <apex:selectList size="1" styleClass="sllDropdown" value="{!insertStudent.Class__c}">
+                        <apex:selectOptions value="{!listClass}"></apex:selectOptions>
+                    </apex:selectList>
+                    <apex:commandButton id="btnCreateId" value="Insert" action="{!saveStudent}" />
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </div>
+
+        <!-- Display student -->
+        <apex:variable var="index" value="{!1}"></apex:variable>
+        <apex:pageBlock>
+            <apex:pageBlockTable styleClass="blockResult" value="{!listStudent}" var="s">
+                <apex:column headerValue="STT">
+                    <apex:outputLabel value="{!index}" />
+                    <apex:variable var="index" value="{!index+1}" />
+                </apex:column>
+                <apex:column value="{!s.id}" />
+                <apex:column value="{!s.StudentCode__c}" />
+                <apex:column value="{!s.FirstName__c}" />
+                <apex:column value="{!s.LastName__c}" />
+                <apex:column value="{!s.BirthDay__c}" />
+                <apex:column headerValue="Sex">
+                    <apex:outputText value="{!IF(s.Sex__c, " Nam ","Nu ")}" />
+                </apex:column>
+                <apex:column value="{!s.Class__r.ClassName__c}" />
+                <apex:column headerValue="Update">
+                    <a href="/apex/VF_UpdateStudent?id={!s.id}">Update</a>
+                </apex:column>
+                <apex:column headerValue="Delete">
+                    <apex:commandButton value="Delete" action="{!deleteStudent}" reRender="formInsertId">
+                        <apex:param name="id" assignTo="{!strId}" value="{!s.id}" />
+                    </apex:commandButton>
+                </apex:column>
+                <apex:column headerValue="Detail">
+                    <a href="/apex/VF_DetailsStudent?id={!s.id}">Detail</a>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+
+        document.getElementById('{!$Component.page.formInsertId.blockCreateId.sectionCreateId.btnCreateId}').disabled = true
+
+        // Get back
+        function doRedirect() {
+            window.history.back();
+        }
+
+    </script>
+</apex:page>

@@ -1,0 +1,54 @@
+<aura:component controller="CMP_CreateStudentCtrl" implements="flexipage:availableForRecordHome,force:appHostable">
+  <!-- <aura:registerEvent name="openUpdateModalInDM" type="c:OpenUpdateModalEvent" /> -->
+  <aura:attribute name="updateStudents" type="Student__c" default="{  'FirstName__c': '',
+              'LastName__c': '',
+              'BirthDay__c': '',
+              'StudentCode__c':'',
+              'Sex__c': false,
+              'Class__c': '',
+            }" />
+  <aura:handler name="init" value="{!this}" action="{!c.getClassJs}" />
+  <aura:attribute name="selectedTabs" type="string" />
+  <aura:attribute name="options" type="List" default="[]" />
+  <aura:attribute name="message" type="boolean" default="false" />
+  <aura:registerEvent name="updateEvent" type="c:refreshData" />
+  <aura:attribute name="disableUpdate" type="boolean" default="false" />
+
+
+  <lightning:card iconName="standard:contact" title="Update Student">
+    <lightning:layout>
+      <lightning:layoutItem size="4" padding="around-small">
+        <lightning:input type="Text" label="First Name" value="{!v.updateStudents.FirstName__c}" required="true" />
+        <lightning:input type="Text" label="Last Name" value="{!v.updateStudents.LastName__c}" required="true" />
+        <lightning:input type="Checkbox" label="Sex" checked="{!v.updateStudents.Sex__c}" class="showHintSex" />
+        <div class="hideHintSex">Check if Sex is Male</div>
+        <lightning:input type="Date" label="Birth Day" value="{!v.updateStudents.BirthDay__c}"
+          onchange="{!c.checkDate}" />
+        <lightning:combobox name="general" label="Class" placeholder="Select an Option"
+          value="{!v.updateStudents.Class__c}" options="{! v.options }" />
+        <lightning:layoutItem size="8" padding="around-small">
+          <lightning:button label="Update Student" disabled="{!v.disableUpdate}" onclick="{!c.editStudent}"
+            variant="brand" class="slds-m-top_medium btnUpdateComUpdate" />
+        </lightning:layoutItem>
+      </lightning:layoutItem>
+    </lightning:layout>
+  </lightning:card>
+  <aura:if isTrue="{!v.message}">
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+      class="slds-modal slds-fade-in-open">
+      <div class="modalNotify">
+        <div class="textNotify">
+          CẬP NHẬT HỌC SINH THÀNH CÔNG
+        </div>
+        <div class="footerNotify">
+          <lightning:button class="slds-button slds-button_neutral  btnNotify" onclick="{!c.closeNotify}">Exit
+          </lightning:button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    <aura:set attribute="else">
+      <div></div>
+    </aura:set>
+  </aura:if>
+</aura:component>

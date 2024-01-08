@@ -1,0 +1,149 @@
+
+.THIS .btnSearchComSearch
+{
+    background-color: rgb(162,162,208);
+    margin-left: 160%;
+
+}
+.THIS .btnCreateComSearch 
+{
+    margin-top: 0px;
+    margin-bottom: 10px;
+    margin-left: 70%;
+    background-color: rgb(162,162,208);
+
+}
+.THIS .btnDeleteComSearch 
+{
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.THIS .modalContainComSearch 
+{
+    /* margin-top: 100px; */
+    margin: 50px auto;
+    width: 510px;
+    height: 500px;
+}
+.THIS .slds-size_4-of-12
+{
+    width: 490px;
+}
+.THIS .tableResultComSearch
+{
+    height: 300px;
+    overflow: auto;
+}
+.THIS .headNameComSearch
+{
+    position:sticky;
+    z-index: 99;
+    top:0;
+}
+.THIS .leftSearchComSearch
+{
+    left: 15%;
+    position: relative;
+    width: 30%;
+}
+.THIS .rightSearchComSearch
+{
+    left: 20%;
+    position: relative;
+    width: 30%;
+
+}
+.THIS .headNameComSearch th
+{
+    background-color: rgb(162,162,208);
+}
+.THIS .btnCloseComSearch
+{
+    position: relative;
+    top: 9px;
+    left: 470px;
+    width: 20px;
+    height: 20px;
+}
+.THIS .createModalComSearch
+{
+    margin-top: 20px;
+}
+/* .THIS button
+{
+    background-color: rgb(162,162,208);
+} */
+.THIS .btnOnRowComSearch
+{
+    /* border-radius: 10px;
+    border-color: unset; */
+    background-color: rgb(162,162,208);
+}
+.THIS .modalAskDelete
+{
+    background-color: white;
+    margin: 200px auto;
+    width: 500px;
+    height: 130px;
+    border-radius: 20px;
+    border-color: rgb(162,162,208);
+}
+.THIS .questionDelete
+{
+    position: relative;
+    top: 20px;
+    margin-left: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+.THIS .footerAskDeleteModal
+{
+    margin-top: 50px;
+    margin-left: 300px;
+}
+
+.THIS .contain
+{
+    background-color: white;
+}
+
+.THIS .pagination
+{
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+}
+.THIS .btnPagi
+{
+    margin: 10px;
+}
+
+.THIS .noColumn
+{
+    width: 5%;
+}
+.THIS .checkboxColumn
+{
+    width: 5%;
+}
+.THIS .nameColumn
+{
+    width: 25%;
+}
+.THIS .studentcodeColumn
+{
+    width: 10%;
+}
+.THIS .birthdayColumn
+{
+    width: 10%;
+}
+.THIS .sexColumn
+{
+    width: 6%;
+}
+.THIS .classColumn
+{
+    width: 20%;
+}

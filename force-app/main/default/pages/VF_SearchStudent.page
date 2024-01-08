@@ -1,0 +1,865 @@
+<apex:page docType="html-5.0" id="page" controller="SearchStudentController" standardStylesheets="false">
+    <style type="text/CSS">
+html {
+    font-size: 20px;
+    font-family: Courier New, Courier, monospace;
+    }
+
+    input[type=text] {
+        border-radius: 0px;
+        height: 20px;
+        width: 400px;
+        margin-bottom: 20px;
+    }
+
+    .titleSearch {
+        background-color: rgb(162, 162, 208);
+        color: white;
+        font-family:
+            Courier New, Courier, monospace;
+        width: 100%;
+        font-weight: bold;
+        height: 30px;
+    }
+
+    .searchAll {
+        top: 30px;
+        height:
+            200px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btnSearch {
+        margin-top: 50px;
+        margin-left: 45%;
+        width: 200px;
+        height: 30px;
+        background-color: rgb(162, 162, 208);
+        color: white;
+    }
+
+    .lblField {
+        padding: 20px;
+    }
+
+    .btnCreate {
+        margin-left: 70%;
+        width: 10%;
+        height: 30px;
+        background-color: rgb(162, 162, 208);
+        color: white;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    .btnInsert {
+        margin-left: 45%;
+        width: 10%;
+        height: 30px;
+        background-color:
+            rgb(162, 162, 208);
+        color: white;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    .btnDelete {
+        width:
+            10%;
+        height: 30px;
+        background-color: rgb(162, 162, 208);
+        color: white;
+        margin-right: 20px;
+    }
+
+    .row {
+        padding: 20px;
+        border: black;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .trColumnName {
+        background-color: rgb(162, 162,
+                208);
+    }
+
+    .sllDropdown {
+        border-radius: 0px;
+        height: 30px;
+        width: 400px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .icon {
+        width: 20px;
+    }
+
+    .divTable {
+        background-color: coral;
+        height: 500px;
+        overflow: scroll;
+    }
+
+    .lnkPagiLeft {
+        height: fit-content;
+        margin: 12px;
+        background-color: rgb(162, 162, 208);
+        border-radius: 10px;
+    }
+
+    .lnkPagiRight {
+        height: fit-content;
+        margin:
+            12px;
+        background-color: rgb(162, 162, 208);
+        border-radius: 10px;
+    }
+
+    .lnkNumberPage {
+        border: 1px solid black;
+        border-radius:
+            10px;
+        padding: 10px;
+        margin: 5px;
+        height: fit-content;
+    }
+
+    .pagination {
+        margin-top: 30px;
+        display: flex;
+        justify-content:
+            center;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modalContent {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 60%;
+        border-radius: 20px;
+    }
+
+    .modalDelete {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: fit-content;
+        border-radius: 20px;
+    }
+
+    .createClose {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .createClose:hover,
+    .createClose:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .updateClose {
+        color: #aaaaaa;
+        float: right;
+        font-size:
+            28px;
+        font-weight: bold;
+    }
+
+    .updateClose:hover,
+    .updateClose:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .deleteClose {
+        color: #aaaaaa;
+        float: right;
+        font-size:
+            28px;
+        font-weight: bold;
+    }
+
+    .deleteClose:hover,
+    .deleteClose:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .detailClose {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .detailClose:hover,
+    .detailClose:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .insertClass {
+        margin-right: 30px;
+        padding: 20px;
+        right:
+            50px;
+        font-weight: bold;
+    }
+
+    .outputSex {
+        margin-left: 18%;
+        font-weight: bold;
+    }
+
+    .txtSex {
+        margin-left: 22%;
+        font-weight:
+            normal;
+    }
+
+    .outputUpdateModal {
+        margin-left: 8%;
+        font-weight: bold;
+    }
+
+    .sllClass {
+        margin-left: 9%;
+        margin-top: 10px;
+    }
+
+    .currentPage {
+        background-color: rgb(168, 168, 195);
+    }
+
+    .hideHintSex {
+        display: none;
+        color: red;
+        margin-top: 10px;
+        margin-left: 10%;
+        font-size: 15px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .btnPagi {
+        margin: 20px;
+    }
+
+    .noColumn {
+        width: 2%;
+    }
+
+    .checkboxColumn {
+        width: 2%;
+    }
+
+    .nameColumn {
+        width: 13%;
+    }
+
+    .studentcodeColumn {
+        width: 8%;
+    }
+
+    .birthdayColumn {
+        width: 29%;
+    }
+
+    .sexColumn {
+        width: 6%;
+    }
+
+    .classColumn {
+        width: 10%;
+    }
+
+    .loadingDiv {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .loadingGif {
+        display: flex;
+        margin: 300px auto;
+        height: 50px;
+        justify-content: center;
+    }
+    .btnAskDelete {
+        margin: 20px;
+        width: fit-content;
+        height: fit-content;
+        background-color: rgb(168, 168, 195);
+        font-size: 25px;
+    }
+        
+    </style>
+
+    <!-- Form to enter value to search -->
+    <apex:form id="formSearchId" title="Search Student">
+        <div id="loading" class="loadingDiv" style="display: {!IF(loading != '', 'block', 'none')};">
+            <img class="loadingGif" src="https://www.wpfaster.org/wp-content/uploads/2013/06/loading-gif.gif" />
+        </div>
+        <p class="titleSearch">Search Student</p>
+        <apex:pageBlock id="blockSearchId">
+            <apex:pageBlockSection id="sectionSearchId" columns="2">
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel value="Name" styleClass="lblField" />
+                    <apex:inputText value="{!searchStudent.FullName__c}" maxlength="50" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel value="Student Code" styleClass="lblField" />
+                    <apex:inputText value="{!searchStudent.StudentCode__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel value="Class" styleClass="lblField" />
+                    <apex:selectList size="1" styleClass="sllDropdown" value="{!searchStudent.Class__c}">
+                        <apex:selectOptions value="{!listClass}"></apex:selectOptions>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel value="Birth Day" styleClass="lblField" />
+                    <apex:inputField value="{!searchStudent.BirthDay__c}" type="date" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel value="Sex" styleClass="lblField" />
+                    <apex:selectList size="1" styleClass="sllDropdown" value="{!strSexTemp}">
+                        <apex:selectOptions value="{!listSex}" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:commandButton value="Search" action="{!searchStudent}" oncomplete="endLoading()" styleClass="btnSearch" reRender="formSearchId, loading"
+            />
+        </apex:pageBlock>
+
+
+        <!-- Create and delete button  -->
+        <apex:pageBlock id="blockButtonId">
+            <apex:commandButton styleClass="btnCreate" onclick="createModal()" value="Create" id="btnCreateId" reRender="blockInsertId"
+            />
+            <apex:commandButton id="btnDeleteId" styleClass="btnDelete" value="Delete" onclick="openDeleteMultipleModal()" reRender="blockTableId, blockPaginationId"
+            />
+        </apex:pageBlock>
+
+        <!-- Display list of student when searching -->
+        <apex:pageBlock id="blockTableId">
+            <table border="1" id="tableResultId">
+                <tr id="trResultId" class="trColumnName">
+                    <th>No</th>
+                    <th id="thResultId">
+                        <input type="checkbox" id="chbCheckAllId" onchange="selectAllCheckboxes(this,'inputCheckRow')" />
+                    </th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Code</th>
+                    <th>Class</th>
+                    <th>Status</th>
+                    <th>Birth Day</th>
+                    <th>Sex</th>
+                    <th></th>
+                </tr>
+                <apex:variable var="index" value="{!1}" />
+                <apex:repeat id="repeatTableId" value="{!listPagi}" var="s">
+                    <tr id="trResultsId">
+                        <td class="noColumn">
+                            <apex:outputLabel value="{!index}" />
+                            <apex:variable var="index" value="{!index+1}" />
+                        </td>
+                        <td class="checkboxColumn">
+                            <apex:inputCheckbox id='inputCheckRow' value="{!s.selected}" onchange="statusCheck('{!s.student.id}', this.checked)" />
+                        </td>
+                        <td class="nameColumn" id="tdFirstname">{!s.student.FirstName__c}</td>
+                        <td class="nameColumn">{!s.student.LastName__c}</td>
+                        <td class="studentcodeColumn">{!s.student.StudentCode__c}</td>
+                        <td class="classColumn">{!s.student.Class__r.ClassName__c}</td>
+                        <th>~</th>
+                        <td class="birthdayColumn">{!s.student.BirthDay__c}</td>
+                        <td class="sexColumn">{!IF(s.student.Sex__c, "Male", "Female")}</td>
+                        <td id="tdResultId">
+                            <apex:commandLink action="{!detailStudent}" oncomplete="detaillModal()" reRender="blockDetailId">
+                                <apex:param name="detailId" value="{!s.student.id}" assignTo="{!detailId}" />
+                                <img class="icon" src="https://icon-library.com/images/detail-icon/detail-icon-2.jpg" />
+                            </apex:commandLink>
+                            <apex:commandLink action="{!goToUpdatePage}" oncomplete="editModal()" reRender="blockUpdateId">
+                                <apex:param name="updateId" value="{!s.student.id}" />
+                                <img class="icon" src="https://th.bing.com/th/id/R.4686ca9fedbfc498b4f0f0a0dc0fdcc2?rik=4U27AH1wZ%2f2%2flQ&pid=ImgRaw&r=0"
+                                />
+                            </apex:commandLink>
+                            <apex:commandLink onclick="openDeleteModal('{!s.student.id}'); return false;">
+                                <img class="icon" src="https://th.bing.com/th/id/R.27299b1faed2d63a3e9512bd8cd187ad?rik=%2fVRT3CdCaWVC3w&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fdelete-button-png-delete-icon-1600.png&ehk=mRIiUoExO9FPzeoYwqDk%2bfWDlxlcYGmfTbaQ2Pbwyak%3d&risl=&pid=ImgRaw&r=0"
+                                />
+                            </apex:commandLink>
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </apex:pageBlock>
+
+        <!-- Input hidden to store value of list Id -->
+        <apex:inputHidden value="{!strListId}" id="listId" />
+        <apex:inputHidden value="{!strDeleteId}" id="deleteId" />
+        <!-- Pagination block -->
+        <apex:pageBlock id="blockPaginationId">
+            <div id="paginationId" class="pagination">
+                <apex:variable value="{!intCurrentPage}" var="crtPage" />
+                <apex:commandButton disabled="{!IF(crtPage == 1, true,'' )}" styleClass="lnkPagiLeft" onclick="goFirstPageJs(); return false;"
+                    id="firstPageId" value="First page" />
+                <apex:actionFunction name="goFirstPage" action="{!changeCurrent}" oncomplete="statusCheckAll()" reRender="blockPaginationId, blockTableId, blockPageValue">
+                    <apex:param value="1" assignTo="{!intCurrentPage}" name="page" />
+                </apex:actionFunction>
+
+                <apex:commandButton disabled="{!IF(crtPage == 1, true,'' )}" value="❮" styleClass="lnkPagiLeft" id="previousPageId" onclick="goPreviousPageJs(); return false;"
+                />
+                <apex:actionFunction name="goPreviousPage" action="{!changeCurrent}" oncomplete="statusCheckAll()" reRender="blockPaginationId, blockTableId, blockPageValue">
+                    <apex:param value="{!intCurrentPage-1}" assignTo="{!intCurrentPage}" name="intCurrentPage"></apex:param>
+                </apex:actionFunction>
+
+                <apex:repeat value="{!listPage}" var="list">
+                    <button style="{!IF(intCurrentPage == list, 'background: rgb(168, 168, 195)', 'background: white')}" class="lnkNumberPage"
+                        value="{!list}" onclick="goPageJs(this.value); return false;">{!list}
+                    </button>
+                </apex:repeat>
+                <apex:actionFunction name="goPage" action="{!changeCurrent}" oncomplete="statusCheckAll();" reRender="blockPaginationId, blockTableId, blockPageValue">
+                    <apex:param value="" assignTo="{!intCurrentPage}" name="intCurrentPage"></apex:param>
+                </apex:actionFunction>
+
+                <apex:commandButton disabled="{!IF(crtPage == intPageCount, true,'' )}" styleClass="lnkPagiRight" value="❯" id="nextPageId"
+                    onclick="goNextPageJs(); return false;" />
+                <apex:actionFunction name="goNextPage" action="{!changeCurrent}" oncomplete="statusCheckAll()" reRender="blockPaginationId, blockTableId, blockPageValue">
+                    <apex:param value="{!intCurrentPage+1}" assignTo="{!intCurrentPage}" name="intCurrentPage"></apex:param>
+                </apex:actionFunction>
+
+                <apex:commandButton disabled="{!IF(crtPage == intPageCount, 'true','' )}" styleClass="lnkPagiRight" onclick="goLastPageJs(); return false;"
+                    id="lastPageId" value="Last page" />
+                <apex:actionFunction name="goLastPage" action="{!changeCurrent}" oncomplete="statusCheckAll()" reRender="blockPaginationId, blockTableId, blockPageValue">
+                    <apex:param value="{!intPageCount}" assignTo="{!intCurrentPage}" name="page" />
+                </apex:actionFunction>
+            </div>
+        </apex:pageBlock>
+
+        <!-- Ask before delete -->
+        <div id="deleteModalId" class="modal">
+            <div class="modalDelete">
+                Bạn có muốn xóa không?
+                <br></br>
+                <apex:commandButton value="YES" styleClass="btnAskDelete" action="{!deleteRow}" reRender="formSearchId" oncomplete="endLoading()"
+                />
+                <apex:commandButton value="NO" styleClass="btnAskDelete" onclick="closeDeleteModal();" />
+            </div>
+        </div>
+
+        <div id="deleteMultipleModalId" class="modal">
+            <div class="modalDelete">
+                Bạn có muốn xóa không?
+                <br></br>
+                <apex:commandButton value="YES" styleClass="btnAskDelete" action="{!selectedStudents}" reRender="formSearchId" oncomplete="disableDelete();"
+                />
+                <apex:commandButton value="NO" styleClass="btnAskDelete" onclick="closeDeleteMultipleModal();" />
+            </div>
+        </div>
+
+    </apex:form>
+
+    <!-- Create Modal -->
+    <apex:outputPanel id="pnlCreateId">
+        <div id="createModalId" class="modal">
+            <div class="modalContent">
+                <span class="createClose">&times;</span>
+                <apex:form id="formCreateId">
+                    <div class="blockInsert">
+                        <apex:pageBlock id="blockInsertId">
+                            <apex:pageBlockSection id="sectionCreateId" columns="1">
+                                <apex:inputField value="{!insertStudent.FirstName__c}" required="true" />
+                                <apex:inputField value="{!insertStudent.LastName__c}" required="true" />
+                                <apex:inputField value="{!insertStudent.Sex__c}" />
+                                <apex:inputField styleClass="showHintSex" value="{!insertStudent.BirthDay__c}" required="true" type="date" onchange="checkDate(this.value)"
+                                />
+                                <apex:outputText id="txtNotifyBDId" styleClass="hideHintSex" value="Choose the day before today"></apex:outputText>
+                                <apex:selectList size="1" styleClass="sllDropdown" value="{!insertStudent.Class__c}">
+                                    <apex:selectOptions value="{!listClass}"></apex:selectOptions>
+                                </apex:selectList>
+                                <apex:commandButton value="Insert" id="btnCreateId" styleClass="btnInsert" action="{!saveStudent}" oncomplete="endLoading()"
+                                    reRender="formSearchId, pnlCreateId" />
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                    </div>
+                </apex:form>
+            </div>
+        </div>
+    </apex:outputPanel>
+    <!-- Update modal -->
+    <apex:outputPanel id="pnlUpdateId">
+        <div id="updateModalId" class="modal">
+            <div class="modalContent">
+                <span class="updateClose">&times;</span>
+                <apex:form>
+                    <apex:pageBlock id="blockUpdateId">
+                        <apex:pageBlockSection columns="1">
+                            <apex:inputField value="{!updateStudent.FirstName__c}" required="true" />
+                            <apex:inputField value="{!updateStudent.LastName__c}" required="true" />
+                            <apex:inputField value="{!updateStudent.Sex__c}" />
+                            <apex:inputField value="{!updateStudent.BirthDay__c}" type="date" required="true" />
+                            <apex:outputLabel styleClass="outputUpdateModal" value="Class">
+                                <apex:selectList size="1" styleClass="sllClass sllDropdown" value="{!updateStudent.Class__c}">
+                                    <apex:selectOptions value="{!listClass}"></apex:selectOptions>
+                                </apex:selectList>
+                            </apex:outputLabel>
+                            <apex:commandButton styleClass="btnInsert" oncomplete="endLoading()" value="Update" action="{!updateStudent}" reRender="formSearchId, pnlUpdateId"
+                            />
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+            </div>
+        </div>
+    </apex:outputPanel>
+
+    <!-- Detail modal -->
+    <apex:outputPanel>
+        <div id="detailModalId" class="modal">
+            <div class="modalContent">
+                <span class="detailClose">&times;</span>
+                <apex:form>
+                    <apex:pageBlock id="blockDetailId">
+                        <apex:pageBlockSection columns="1">
+                            <apex:outputField value="{!detailStudent.id}" />
+                            <apex:outputField value="{!detailStudent.StudentCode__c}" />
+                            <apex:outputField value="{!detailStudent.FirstName__c}" />
+                            <apex:outputField value="{!detailStudent.LastName__c}" />
+                            <apex:outputField value="{!detailStudent.BirthDay__c}" />
+                            <apex:outputLabel styleClass="outputSex" value="Sex">
+                                <apex:outputText styleClass="txtSex" value="{!IF(detailStudent.Sex__c, " Nam ","Nu ")}" />
+                            </apex:outputLabel>
+                            <apex:outputField value="{!detailStudent.Class__r.ClassName__c}" />
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:form>
+            </div>
+        </div>
+    </apex:outputPanel>
+
+
+    <script>
+
+        // Get loading div
+        var loading = document.getElementById("loading");
+
+        // Hide the loading div
+        function endLoading() {
+            setTimeout(() => {
+                var loading = document.getElementById("loading");
+                loading.style.display = 'none';
+            }, "1000");
+        }
+
+        // Go first page by action function
+        function goFirstPageJs() {
+            goFirstPage();
+        }
+
+        // Go last page by action function
+        function goLastPageJs() {
+            goLastPage();
+        }
+
+        // Go next page by action function
+        function goNextPageJs() {
+            goNextPage();
+        }
+
+        // Go previous page by action function
+        function goPreviousPageJs() {
+            goPreviousPage();
+        }
+
+        // Go page you selecting by action function
+        function goPageJs(value) {
+            goPage(value);
+
+        }
+
+        // Disable button delete when fresh page
+        document.getElementById('{!$Component.page.formSearchId.blockButtonId.btnDeleteId}').disabled = true;
+
+        // If list Id not null, enable delete button
+        if (document.getElementById('{!$Component.page.formSearchId.listId}').value != '') {
+            document.getElementById('{!$Component.page.formSearchId.blockButtonId.btnDeleteId}').disabled = false;
+        }
+
+        // Disable button after delete
+        function disableDelete() {
+            document.getElementById('{!$Component.page.formSearchId.blockButtonId.btnDeleteId}').disabled = true;
+            endLoading()
+        }
+
+        
+
+        // Select all checkbox on row when click the check all check box
+        function selectAllCheckboxes(obj, receivedInputID) {
+            countInputCheckbox = 0
+            document.getElementById('{!$Component.page.formSearchId.blockButtonId.btnDeleteId}').disabled = false;
+            var inputCheckBox = document.getElementsByTagName("input");
+            for (var i = 0; i< inputCheckBox.length; i++) {
+                if (inputCheckBox[i].id.indexOf(receivedInputID) != -1) {
+                    if (inputCheckBox[i].checked == true) {
+                        countCheckOnPage++
+                    }
+                }
+            }
+            for (var i = 0; i < inputCheckBox.length; i++) {
+                if (inputCheckBox[i].id.indexOf(receivedInputID) != -1) {
+                    countInputCheckbox++
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+            if (obj.checked == true) {
+                countCheckAll = countCheckAll - countCheckOnPage + countInputCheckbox
+            }
+            else {
+                countCheckOnPage = 0
+                countCheckAll = countCheckAll - countInputCheckbox
+            }
+            console.log('countCheckAll', countCheckAll)
+            console.log('countCheckOnPage', countCheckOnPage)
+            console.log('countInputCheckbox', countInputCheckbox)
+            checkDeleteBtnState();
+        }
+
+
+        // Hide pagination if had no value
+        var valueRow = document.getElementById("tdFirstname");
+        var pagi = document.getElementById("paginationId");
+        if (valueRow == null) {
+            pagi.style.display = 'none';
+        }
+
+        // Count all checked row
+        var countCheckAll = 0
+
+        // Count rows that checked on a page
+        var countCheckOnPage = 0
+
+        // Count the number of row in a page
+        var countInputCheckbox = 0
+
+        // Check the status of checkbox on row
+        function statusCheck(id, status) {           
+            if (status == false) {
+                if (countCheckAll != 0) {
+                    countCheckAll--
+                }
+            }
+            else if (status == true) {
+                countCheckAll++
+            }
+            console.log('countCheckAll', countCheckAll)
+            console.log('countCheckOnPage', countCheckOnPage)
+            console.log('countInputCheckbox', countInputCheckbox)
+            statusCheckAll();
+            checkDeleteBtnState();
+        }
+
+        // Check to disable or enable base on the number of row checked
+        function checkDeleteBtnState() {
+            if (countCheckAll > 0) {
+                document.getElementById('{!$Component.page.formSearchId.blockButtonId.btnDeleteId}').disabled = false;
+            }
+            else {
+                document.getElementById('{!$Component.page.formSearchId.blockButtonId.btnDeleteId}').disabled = true;
+            }
+        }
+        statusCheckAll();
+
+        // Set true for the check all check box when all of the check box on row is true, 
+        // use for store the state when change page
+        function statusCheckAll() {
+            countCheckOnPage = 0
+            countInputCheckbox = 0
+            var countCheck = 0;
+            var countInputCheck = 0;
+            var inputCheckBox = document.getElementsByTagName("input");
+
+            for (var i = 0; i < inputCheckBox.length; i++) {
+                if (inputCheckBox[i].id.indexOf('inputCheckRow') != -1) {
+                    countInputCheck++;
+                    if (inputCheckBox[i].checked == true) {
+                        countCheck++;
+                    }
+                }
+            }
+            if (countCheck == countInputCheck && countCheck != 0) {
+                document.getElementById('chbCheckAllId').checked = true;
+            }
+            else {
+                document.getElementById('chbCheckAllId').checked = false;
+            }
+
+        }
+
+
+
+        // Handle insert modal
+        var insertModal = document.getElementById("createModalId");
+        var createSpan = document.getElementsByClassName("createClose")[0];
+        function createModal() {
+            insertModal.style.display = "block";
+        }
+        createSpan.onclick = function () {
+            insertModal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == insertModal) {
+                insertModal.style.display = "none";
+            }
+        }
+
+
+        // Handle detail modal
+        var detailModal = document.getElementById("detailModalId");
+        var detailSpan = document.getElementsByClassName("detailClose")[0];
+        function detaillModal() {
+            detailModal.style.display = "block";
+        }
+        detailSpan.onclick = function () {
+            detailModal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == detailModal) {
+                detailModal.style.display = "none";
+            }
+        }
+
+
+        // Handle update modal
+        var updateModal = document.getElementById("updateModalId");
+        console.log('updateModal', updateModal);
+        var updateSpan = document.getElementsByClassName("updateClose")[0];
+        function editModal() {
+            updateModal.style.display = "block";
+            console.log(updateModal);
+        }
+        updateSpan.onclick = function () {
+            updateModal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == updateModal) {
+                updateModal.style.display = "none";
+            }
+        }
+
+
+        // Handle delete modal
+        var deleteModal = document.getElementById("deleteModalId");
+        function openDeleteModal(Id) {
+            console.log(Id)
+            var deleteModal = document.getElementById("deleteModalId");
+            document.getElementById('{!$Component.page.formSearchId.deleteId}').value = Id;
+            deleteModal.style.display = "block";
+        }
+        function closeDeleteModal() {
+            deleteModal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
+            }
+        }
+
+
+        //Handle delete multiple modal
+        function openDeleteMultipleModal() {
+            var deleteMultipleModal = document.getElementById("deleteMultipleModalId");
+            deleteMultipleModal.style.display = "block";
+        }
+        function closeDeleteMultipleModal() {
+            deleteMultipleModal.style.display = "none";
+        }
+
+        // Disable create button in modal create
+        document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = true
+
+        // Check value of date
+        function checkDate(value) {
+
+            var notifyBD = document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.txtNotifyBDId}')
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            var splitDate = value.split("-")
+
+            let dayOfToday = parseInt(dd)
+            let monthOfToday = parseInt(mm)
+            let yearOfToday = parseInt(yyyy)
+            let dayOfDate = parseInt(splitDate[2])
+            let monthOfDate = parseInt(splitDate[1])
+            let yearOfDate = parseInt(splitDate[0])
+
+            if (yearOfToday < yearOfDate) {
+                notifyBD.style.display = 'block'
+                document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = true
+            }
+            else if (yearOfToday > yearOfDate) {
+                notifyBD.style.display = 'none'
+                document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = false
+            }
+            else if (yearOfToday == yearOfDate) {
+                if (monthOfToday < monthOfDate) {
+                    notifyBD.style.display = 'block'
+                    document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = true
+                }
+                else if (monthOfToday > monthOfDate) {
+                    notifyBD.style.display = 'none'
+                    document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = false
+                }
+                else if (monthOfToday == monthOfDate) {
+                    if (dayOfToday >= dayOfDate) {
+                        notifyBD.style.display = 'none'
+                        document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = false
+                    }
+                    if (dayOfToday < dayOfDate) {
+                        notifyBD.style.display = 'block'
+                        document.getElementById('{!$Component.page.formCreateId.blockInsertId.sectionCreateId.btnCreateId}').disabled = true
+                    }
+                }
+            }
+        }
+    </script>
+
+</apex:page>

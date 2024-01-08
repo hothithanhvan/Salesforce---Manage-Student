@@ -1,0 +1,95 @@
+.leftSearch
+{
+    left: 10%;
+    position: relative;
+    width: 30%;
+    top: 20%;
+
+}
+.rightSearch
+{
+    left: 50%;
+    position: absolute;
+    width: 30%;
+    top: 25%;
+
+}
+.modalContain 
+{
+    margin-top: 200px;
+    margin: 100px auto;
+    width: 510px;
+    height: 490px;
+    border-radius: 20px;
+}
+
+.modalAskDelete
+{
+    background-color: white;
+    margin: 200px auto;
+    width: 500px;
+    height: 130px;
+    border-radius: 20px;
+    border-color: rgb(162,162,208);
+}
+.questionDelete
+{
+    position: relative;
+    top: 20px;
+    margin-left: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+.footerAskDeleteModal
+{
+    margin-top: 50px;
+    margin-left: 300px;
+}
+.searchBtn
+{
+    margin: auto;
+    margin-left: 43%;
+}
+.createBtn
+{
+    margin: 10px;
+    margin-left: 80%;
+}
+
+.headerTable th
+{
+    background-color: rgb(162,162,208);
+
+}
+.spinnerIcon
+{
+    margin: auto;
+    display: flex;
+    position: absolute;
+}
+.contain
+{
+    background-color: white;
+}
+.noStudentNotify
+{
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    border-color: rgb(162,162,208);
+    text-align: center;
+    font-size: 20px;
+    font-weight: bolder;
+    margin: 10px auto;
+    border-style: solid;
+
+}
+.blockCreateBtn
+{
+    margin: 10px;
+}
+.pagination
+{
+    margin: 10px auto;
+    margin-left: 40%;
+}

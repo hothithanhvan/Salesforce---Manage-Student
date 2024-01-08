@@ -1,0 +1,67 @@
+<aura:component controller="CMP_CreateStudentCtrl" implements="flexipage:availableForRecordHome,force:appHostable">
+  <aura:attribute name="insertStudent" type="Student__c" default="{  'FirstName__c': '',
+              'LastName__c': '',
+              'BirthDay__c': '',
+              'Sex__c': false,
+              'Class__c': ''
+              }" />
+
+  <aura:attribute name="newStudent" type="Student__c" default="{  'FirstName__c': '',
+                          'LastName__c': '',
+                          'BirthDay__c': '',
+                          'Sex__c': false,
+                          'Class__c': ''
+                          }" />
+  <aura:attribute name="message" type="boolean" default="false" />
+  <aura:handler name="init" value="{!this}" action="{!c.getClassJs}" />
+  <aura:attribute name="options" type="List" />
+  <aura:attribute name="selectedTabs" type="string" />
+  <aura:attribute name="Student" type="Student__c" />
+  <aura:attribute name="dateLimit" type="string" />
+  <aura:registerEvent name="createEvent" type="c:refreshData" />
+  <aura:attribute name="disableSave" type="boolean" default="true" />
+
+
+  <lightning:card iconName="standard:contact" title="Add a Student">
+    <lightning:layout>
+      <lightning:layoutItem size="4" padding="around-small">
+        <lightning:input type="Text" label="First Name" value="{!v.newStudent.FirstName__c}" required="true" />
+        <lightning:input type="Text" label="Last Name" value="{!v.newStudent.LastName__c}" required="true" />
+        <lightning:input type="Checkbox" label="Sex" checked="{!v.newStudent.Sex__c}" class="showHintSex" />
+        <div class="hideHintSex">Check if Sex is Male</div>
+        <lightning:input type="Date" label="Birth Day" onchange="{!c.checkDate}" max="{!v.dateLimit}"
+          value="{!v.newStudent.BirthDay__c}" />
+        <lightning:select name="Objects" label="Class" value="{!v.newStudent.Class__c}">
+          <option value="--None--" text="--None--" />
+          <aura:iteration items="{!v.options}" var="objectname">
+            <option value="{!objectname.Id}" text="{!objectname.ClassName__c}" />
+          </aura:iteration>
+        </lightning:select>
+        <lightning:layoutItem size="8" padding="around-small">
+          <lightning:button label="Create Student" disabled="{!v.disableSave}" onclick="{!c.handleCreateStudent}"
+            variant="brand" class="slds-m-top_medium" />
+        </lightning:layoutItem>
+      </lightning:layoutItem>
+    </lightning:layout>
+    <!-- <p>{!v.message}</p> -->
+  </lightning:card>
+
+  <aura:if isTrue="{!v.message}">
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+      class="slds-modal slds-fade-in-open">
+      <div class="modalNotify">
+        <div class="textNotify">
+          THÊM HỌC SINH THÀNH CÔNG
+        </div>
+        <div class="footerNotify">
+          <lightning:button class="slds-button slds-button_neutral  btnNotify" onclick="{!c.closeNotify}">Exit
+          </lightning:button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    <aura:set attribute="else">
+      <div></div>
+    </aura:set>
+  </aura:if>
+</aura:component>
